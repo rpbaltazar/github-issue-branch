@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'github_issue_branch'
-  s.version = '0.0.0alpha'
+  s.version = '0.0.0.0'
   s.date = '2016-01-28'
   s.summary = 'Create branches from open issues'
   s.description = 'Check a list of open issues in a specific repository, assign it to you and get your branch created'
