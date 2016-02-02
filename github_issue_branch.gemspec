@@ -6,9 +6,13 @@ Gem::Specification.new do |s|
   s.description = 'Check a list of open issues in a specific repository, assign it to you and get your branch created'
   s.authors = ['Rui Baltazar']
   s.email = 'rui.p.baltazar@gmail.com'
-  s.files = ['lib/github_issue_branch.rb']
+  s.files = [
+    'lib/github_issue_branch.rb',
+    'lib/github_issue_branch/readline_helper.rb'
+  ]
   s.executables << 'github_issue_branch'
   s.homepage = 'http://github.com/rpbaltazar/github-issue-branch'
   s.add_runtime_dependency 'github_api', '~> 0.13'
+  s.add_runtime_dependency 'rb-readline', '~> 0.5'
   s.license = 'MIT'
 end
