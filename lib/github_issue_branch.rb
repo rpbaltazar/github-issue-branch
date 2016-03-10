@@ -1,7 +1,7 @@
 require 'github_api'
 require 'yaml'
 require 'pry'
-require_relative './github_issue_branch/readline_helper'
+require_relative './git_utils'
 
 class GithubIssueBranch
 
@@ -36,7 +36,7 @@ class GithubIssueBranch
 
   def get_issue_list
     # TODO: read this from either config file or from git remotes
-    list = @github.issues.list user: 'intelllex', repo: 'integrated'
+    list = @github.issues.list user: @github_username, repo: @github_repo
     list.select { |issue| issue['pull_request'].nil? }
   end
 
@@ -65,18 +65,23 @@ class GithubIssueBranch
 
   def load_configs
     @github_token = read_conf 'github_auth_token', 'GITHUB_AUTH_TOKEN'
-    @github_repo = read_conf 'github_repo', 'GITHUB_REPO'
+    username, repo = GitUtils.get_remote_user_repo('origin')
+    @github_username = read_conf('github_username') || username
+    @github_repo = read_conf('github_repo') || repo
   end
 
-  def read_conf(conf_name, environment_key)
+  def read_conf(conf_name, environment_key=nil)
     GITHUB_CONF_FILE.each do |config_file|
       if File.exists? config_file
         configurations = YAML.load_file config_file
         return configurations[conf_name] if configurations[conf_name]
       end
     end
-    value ||= env_required environment_key
-    value
+
+    if environment_key
+      value ||= env_required environment_key
+      value
+    end
   end
 
   def env_required var_name
