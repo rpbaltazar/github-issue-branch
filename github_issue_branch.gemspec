@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.executables << 'github_issue_branch'
   s.homepage = 'http://github.com/rpbaltazar/github-issue-branch'
   s.add_runtime_dependency 'github_api', '~> 0.13'
+  s.add_runtime_dependency 'git', '~> 1.3'
   s.add_runtime_dependency 'rb-readline', '~> 0.5'
   s.license = 'MIT'
 end

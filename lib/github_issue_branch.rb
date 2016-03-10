@@ -7,18 +7,15 @@ class GithubIssueBranch
 
   module Error
 
-    class AuthFileNotFound < StandardError
+    class ConfNotFound < StandardError
       def message
-        "No auth file was found. Please create an auth token on github and store it under #{GITHUB_TOKEN_FILE[0]} or #{GITHUB_TOKEN_FILE[1]}"
+        "Required configuration was not found in config files nor environment variables"
       end
     end
 
     class NoIssuesAvailable < StandardError
       def message
-        # TODO: Load those from the configuration
-        username = 'intelllex'
-        repo = 'integrated'
-        "No open issues were found in #{username}/#{repo}"
+        "No open issues were found in #{@github_repo}"
       end
     end
 
@@ -30,11 +27,11 @@ class GithubIssueBranch
 
   end
 
-  GITHUB_CONF_FILE = ['.github_issue_branch_auth', "#{ENV['HOME']}/.github_issue_branch_auth"]
+  GITHUB_CONF_FILE = ['.github_issue_branch_conf', "#{ENV['HOME']}/.github_issue_branch_conf"]
 
   def initialize
-    @github_conf = YAML.load_file github_auth_file
-    @github = Github.new(oauth_token: @github_conf)
+    load_configs
+    @github = Github.new(oauth_token: @github_token)
   end
 
   def get_issue_list
@@ -66,10 +63,25 @@ class GithubIssueBranch
 
   private
 
-  def github_auth_file
-    conf_file = GITHUB_CONF_FILE.select { |conf_file| File.exists? conf_file }.first
-    raise Error::AuthFileNotFound unless conf_file
-    conf_file
+  def load_configs
+    @github_token = read_conf 'github_auth_token', 'GITHUB_AUTH_TOKEN'
+    @github_repo = read_conf 'github_repo', 'GITHUB_REPO'
+  end
+
+  def read_conf(conf_name, environment_key)
+    GITHUB_CONF_FILE.each do |config_file|
+      if File.exists? config_file
+        configurations = YAML.load_file config_file
+        return configurations[conf_name] if configurations[conf_name]
+      end
+    end
+    value ||= env_required environment_key
+    value
+  end
+
+  def env_required var_name
+    raise Error::ConfNotFound if ENV[var_name].nil?
+    ENV[var_name]
   end
 
   def issue_matcher issue, selection

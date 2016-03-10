@@ -36,3 +36,5 @@ build/
 .rvmrc
 
 *~
+
+.github_issue_branch_conf
