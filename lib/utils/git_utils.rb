@@ -23,6 +23,6 @@ class GitUtils
 
   def self.create_branch name
     # TODO: Throw error if branch already exists either locally or remotely
-    g.checkout name
+    g.branch(name).checkout
   end
 end

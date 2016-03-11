@@ -2,6 +2,7 @@ require 'github_api'
 require 'yaml'
 require 'utils/git_utils'
 require 'utils/string_utils'
+require 'readline'
 
 class GithubIssueBranch
 
