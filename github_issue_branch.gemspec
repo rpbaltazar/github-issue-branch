@@ -8,11 +8,8 @@ Gem::Specification.new do |s|
   s.description = 'Check a list of open issues in a specific repository, assign it to you and get your branch created'
   s.authors = ['Rui Baltazar']
   s.email = 'rui.p.baltazar@gmail.com'
-  s.files = [
-    'lib/github_issue_branch.rb',
-    'lib/utils/git_utils.rb',
-    'lib/utils/string_utils.rb'
-  ]
+  s.files = Dir['{lib}/**/*']
+  s.require_paths = %w[ lib ]
   s.executables << 'github_issue_branch'
   s.homepage = 'http://github.com/rpbaltazar/github-issue-branch'
   s.add_runtime_dependency 'github_api', '~> 0.13'

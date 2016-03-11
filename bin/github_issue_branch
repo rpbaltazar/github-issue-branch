@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/github_issue_branch.rb'
+require 'github_issue_branch'
 
 g_issue_branch = GithubIssueBranch.new
 g_issue_branch.select_issue

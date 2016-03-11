@@ -1,8 +1,7 @@
 require 'github_api'
 require 'yaml'
-require 'pry'
-require_relative './git_utils'
-require_relative './string_utils'
+require 'utils/git_utils'
+require 'utils/string_utils'
 
 class GithubIssueBranch
 
