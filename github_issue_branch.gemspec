@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.email = 'rui.p.baltazar@gmail.com'
   s.files = [
     'lib/github_issue_branch.rb',
-    'lib/git_utils.rb',
-    'lib/string_utils.rb'
+    'lib/utils/git_utils.rb',
+    'lib/utils/string_utils.rb'
   ]
   s.executables << 'github_issue_branch'
   s.homepage = 'http://github.com/rpbaltazar/github-issue-branch'
