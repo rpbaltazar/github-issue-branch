@@ -1,3 +1,5 @@
+require File.expand_path("../lib/version", __FILE__)
+
 Gem::Specification.new do |s|
   s.name = 'github_issue_branch'
   s.version = GithubIssueBranch::VERSION
@@ -8,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = 'rui.p.baltazar@gmail.com'
   s.files = [
     'lib/github_issue_branch.rb',
-    'lib/git_utils.rb'
+    'lib/git_utils.rb',
     'lib/string_utils.rb'
   ]
   s.executables << 'github_issue_branch'
