@@ -17,4 +17,11 @@ describe StringUtils do
       end
     end
   end
+
+  describe 'branch_sanitize' do
+    it 'sanitizes the string and adds id in the end' do
+      branch_name = StringUtils.branch_sanitize 'this is a test', '100'
+      branch_name.must_equal 'this-is-a-test-100'
+    end
+  end
 end
