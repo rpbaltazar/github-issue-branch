@@ -2,6 +2,7 @@ require 'github_api'
 require 'yaml'
 require 'pry'
 require_relative './git_utils'
+require_relative './string_utils'
 
 class GithubIssueBranch
 
@@ -36,7 +37,7 @@ class GithubIssueBranch
 
   def get_issue_list
     # TODO: read this from either config file or from git remotes
-    list = @github.issues.list user: @github_username, repo: @github_repo
+    list = @github.issues.list user: @github_repo_owner, repo: @github_repo
     list.select { |issue| issue['pull_request'].nil? }
   end
 
@@ -45,12 +46,14 @@ class GithubIssueBranch
     raise Error::NoIssuesAvailable unless issue_list.length > 0
     print_list issue_list
     issue = choose_issue issue_list
-    puts "Assigning issue to you"
-    puts "git co -b #{issue}"
+    # TODO: Fix the assignee as if owner is an organization it is wrong
+    @github.issues.edit @github_repo_owner, @github_repo, issue.number, assignee: @github_repo_owner
+    GitUtils.create_branch(StringUtils.branch_sanitize issue.title, issue.number)
   end
 
   def choose_issue issue_list
-    issue_selection = ReadlineHelper.readline('Select an issue: ', issue_list)
+    # TODO: Add history and autocomplete with tab
+    issue_selection = Readline.readline('> ', true)
     return nil if issue_selection == '' or issue_selection.nil?
     issue = issue_list.select{|s| issue_matcher s, issue_selection }.first
     raise Error::IssueNotFound if issue.nil?
@@ -65,8 +68,8 @@ class GithubIssueBranch
 
   def load_configs
     @github_token = read_conf 'github_auth_token', 'GITHUB_AUTH_TOKEN'
-    username, repo = GitUtils.get_remote_user_repo('origin')
-    @github_username = read_conf('github_username') || username
+    owner, repo = GitUtils.get_remote_user_repo('origin')
+    @github_repo_owner = read_conf('github_owner') || owner
     @github_repo = read_conf('github_repo') || repo
   end
 
