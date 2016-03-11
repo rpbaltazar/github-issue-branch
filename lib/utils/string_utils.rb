@@ -4,10 +4,12 @@ class StringUtils
   end
 
   def self.sanitize string
-    string.strip!
-    string.gsub!(/^.*(\\|\/)/, '')
-    string.gsub!(/[^0-9A-Za-z.\-]/, '-')
-    string.gsub!(' ', '-')
-    string
+    sanitized = string.strip
+    sanitized.downcase!
+    sanitized.gsub!(/[`~!@#\$%^*()_+\-=\[\]\{\}\|\\'";:\?<>,.]/,'')
+    sanitized.gsub!(/[&\/]/,' ')
+    sanitized.gsub!(/\s+/, ' ')
+    sanitized.gsub!(' ', '-')
+    sanitized
   end
 end
