@@ -36,7 +36,6 @@ class GithubIssueBranch
   end
 
   def get_issue_list
-    # TODO: read this from either config file or from git remotes
     list = @github.issues.list user: @github_repo_owner, repo: @github_repo
     list.select { |issue| issue['pull_request'].nil? }
   end
@@ -47,7 +46,7 @@ class GithubIssueBranch
     print_list issue_list
     issue = choose_issue issue_list
     # TODO: Fix the assignee as if owner is an organization it is wrong
-    @github.issues.edit @github_repo_owner, @github_repo, issue.number, assignee: @github_repo_owner
+    @github.issues.edit @github_repo_owner, @github_repo, issue.number, assignee: @github_username
     GitUtils.create_branch(StringUtils.branch_sanitize issue.title, issue.number)
   end
 
@@ -67,6 +66,7 @@ class GithubIssueBranch
   private
 
   def load_configs
+    @github_username = @github.users.get.login
     @github_token = read_conf 'github_auth_token', 'GITHUB_AUTH_TOKEN'
     owner, repo = GitUtils.get_remote_user_repo('origin')
     @github_repo_owner = read_conf('github_owner') || owner
