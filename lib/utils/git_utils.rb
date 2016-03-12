@@ -13,12 +13,10 @@ class GitUtils
     get_remote(name).url
   end
 
-  # TODO: Use regex to extract values instead?
   def self.get_remote_user_repo name
     url = get_remote_url(name)
-    username_repository = url.split(':')[1]
-    username_repository.slice! '.git'
-    username_repository.split '/'
+    repo_owner_name = /.*github.com[:|\/](.*).git/.match(url).captures
+    repo_owner_name.first.split '/'
   end
 
   def self.create_branch name
