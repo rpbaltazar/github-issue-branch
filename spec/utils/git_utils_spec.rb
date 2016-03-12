@@ -11,10 +11,17 @@ module Git
         url: 'git@github.com:rpbaltazar/github-issue-branch.git'
       }
     )
+    remote_heroku = OpenStruct.new(
+      {
+        name: 'heroku',
+        url: 'https://github.com/seattlerb/minitest.git'
+      }
+    )
     git = OpenStruct.new(
       {
         remotes: [
-          remote_origin
+          remote_origin,
+          remote_heroku
         ]
       }
     )
@@ -28,6 +35,8 @@ describe GitUtils do
       remote = GitUtils.get_remote 'origin'
       remote.name.must_equal 'origin'
       remote.url.must_equal 'git@github.com:rpbaltazar/github-issue-branch.git'
+
+      # TODO: Throw error if remote name not found
     end
   end
 
@@ -43,6 +52,10 @@ describe GitUtils do
       repo_owner, repo_name = GitUtils.get_remote_user_repo 'origin'
       repo_owner.must_equal 'rpbaltazar'
       repo_name.must_equal 'github-issue-branch'
+
+      repo_owner, repo_name = GitUtils.get_remote_user_repo 'heroku'
+      repo_owner.must_equal 'seattlerb'
+      repo_name.must_equal 'minitest'
     end
   end
 end
