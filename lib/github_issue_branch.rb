@@ -33,6 +33,7 @@ class GithubIssueBranch
   def initialize
     load_configs
     @github = Github.new(oauth_token: @github_token)
+    @github_username = @github.users.get.login
   end
 
   def get_issue_list
@@ -66,7 +67,6 @@ class GithubIssueBranch
   private
 
   def load_configs
-    @github_username = @github.users.get.login
     @github_token = read_conf 'github_auth_token', 'GITHUB_AUTH_TOKEN'
     owner, repo = GitUtils.get_remote_user_repo('origin')
     @github_repo_owner = read_conf('github_owner') || owner
