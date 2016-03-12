@@ -30,4 +30,19 @@ describe GitUtils do
       remote.url.must_equal 'git@github.com:rpbaltazar/github-issue-branch.git'
     end
   end
+
+  describe 'get_remote_url' do
+    it 'fetches the remote url from git' do
+      url = GitUtils.get_remote_url 'origin'
+      url.must_equal 'git@github.com:rpbaltazar/github-issue-branch.git'
+    end
+  end
+
+  describe 'get_remote_user_repo' do
+    it 'fetches the repository owner and repository name' do
+      repo_owner, repo_name = GitUtils.get_remote_user_repo 'origin'
+      repo_owner.must_equal 'rpbaltazar'
+      repo_name.must_equal 'github-issue-branch'
+    end
+  end
 end
